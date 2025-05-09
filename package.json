@@ -1,0 +1,14 @@
+{
+  "name": "macropad-electron",
+  "version": "1.0.0",
+  "description": "Un gestionnaire de macropad série avec interface Electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "serialport": "^11.0.0",
+    "electron": "^30.0.0",
+    "node-notifier": "^10.0.1"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "l1c1": {
+    "delay": 1,
+    "notif": "test 1",
+    "cmd": [{
+      "type": "text",
+      "value": "test\n"
+    },
+    {
+      "type": "text",
+      "value": "1\n"
+    }]
+  }
+}

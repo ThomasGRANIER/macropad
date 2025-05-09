@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Disposition du Macropad</title>
+    <style>
+      body { font-family: sans-serif; padding: 10px; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+      .btn { padding: 10px; background: #eee; border-radius: 5px; text-align: center; font-size: 14px; }
+    </style>
+  </head>
+  <body>
+    <h1>Disposition des touches</h1>
+    <div id="grid" class="grid"></div>
+    <script>
+      fetch('config.json')
+        .then(res => res.json())
+        .then(data => {
+          const grid = document.getElementById('grid');
+          Object.entries(data).forEach(([key, val]) => {
+            const btn = document.createElement('div');
+            btn.className = 'btn';
+            btn.innerHTML = `<b>${key}</b><br>${val.notif || ''}`;
+            grid.appendChild(btn);
+          });
+        });
+    </script>
+  </body>
+</html>
