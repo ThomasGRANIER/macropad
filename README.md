@@ -2,19 +2,19 @@
 Ce logiciel est mon soft personnel pour mon macropad personnelle
 
 ## Layout
-Les boutons envois LXCY sur le port série à l'appuis d'un switch mécanique.
+Les boutons envois L*X*C*Y* sur le port série à l'appuis d'un switch mécanique.
 Exemple :
-| X / Y | 1    | 2    |
-|:-----:|:----:|:----:|
-| 1     | L1C1 | L1C2 |
-| 2     | L2C1 | L2C2 |
+| *X* / *Y* | 1    | 2    |
+|:---------:|:----:|:----:|
+| 1         | L1C1 | L1C2 |
+| 2         | L2C1 | L2C2 |
 
 Et pour les encodeurs voici la logique :
-| Sens de rotation | Commande    |
-|:----------------:|:-----------:|
-| Horaire          | EX+         |
-| Anti-Horaire     | EX-         |
-| Bouton poussoir  | EXB         |
+| Sens de rotation | Commande      |
+|:----------------:|:-------------:|
+| Horaire          | E*X*+         |
+| Anti-Horaire     | E*X*-         |
+| Bouton poussoir  | E*X*B         |
 
 *Avec X qui est égale au numéro de l'encodeur*  
 
