@@ -19,8 +19,8 @@ Et pour les encodeurs voici la logique :
 *Avec X qui est égale au numéro de l'encodeur*  
 
 ## TO-DO Interface
-- Créer layout selon le macropad (V4 ou V5)
-- Récupération des inputs sur le port série
+- <s>Créer layout selon le macropad V4</s>
+- <s>Récupération des inputs sur le port série</s>
 - Détection du boiter quand branché (pas besoin de renseigner le port)
 - Exécution d'un script à l'appuis (Python / Bash)
 - Intégrer éditeur de texte pour l'édition du script

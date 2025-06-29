@@ -10,12 +10,38 @@
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
+    <link rel="stylesheet" href="styles.css"> 
     <title>SimplePAD</title>
   </head>
-  <body>
-    <h1>Hello from Electron renderer!</h1>
-    <p>👋</p>
-    <p id="info"></p>
+    <div id="Encodeurs">
+      <div id="E1">
+        <button id="E1-">E1-</button>
+        <button id="E1B">E1B</button>
+        <button id="E1+">E1+</button>
+      </div>
+      <div id="E2">
+        <button id="E2-">E2-</button>
+        <button id="E2B">E2B</button>
+        <button id="E2+">E2+</button>
+      </div>
+    </div>
+    <div id="Boutons">
+      <div id="L1">
+        <button id="L1C1">L1C1</button>
+        <button id="L1C2">L1C2</button>
+        <button id="L1C3">L1C3</button>
+      </div>
+      <div id="L2">
+        <button id="L2C1">L2C1</button>
+        <button id="L2C2">L2C2</button>
+        <button id="L1C3">L1C3</button>
+      </div>
+      <div id="L3">
+        <button id="L3C1">L3C1</button>
+        <button id="L3C2">L3C2</button>
+        <button id="L3C3">L3C3</button>
+      </div>
+    </div>
   </body>
   <script src="./renderer.js"></script>
 </html>
