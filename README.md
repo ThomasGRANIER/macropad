@@ -22,7 +22,10 @@ Et pour les encodeurs voici la logique :
 - <s>Créer layout selon le macropad V4</s>
 - <s>Récupération des inputs sur le port série</s>
 - Détection du boiter quand branché (pas besoin de renseigner le port)
+    - Pour faire ça en circuitPython il faut recompiler circuitPython lui même
 - Exécution d'un script à l'appuis (Python / Bash)
+    - Créer un fichier YAML
+    - Interpreter par un script python ou autre
 - Intégrer éditeur de texte pour l'édition du script
 - Petit bouton pour jouer le script sans l'appuis
 - Intégration d'envoie d'information pour l'écran
