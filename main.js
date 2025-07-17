@@ -1,6 +1,6 @@
 const { app, BrowserWindow } = require('electron/main')
 const fs = require('fs');
-const { openSerialPort } = require('./library/SerialManagement');
+const { openSerialPort, closeSerialPort } = require('./library/SerialManagement');
 
 const path = require('path');
 

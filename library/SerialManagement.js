@@ -1,10 +1,12 @@
 const { SerialPort } = require('serialport');
+const { runPythonScript } = require('./ExecuteMacro');
 
-SerialPort.list().then(ports => {
-    ports.forEach(port => {
-      console.log(`Port détecté : ${port.path} - ${port.vendorId || 'inconnu'} - ${port.productId || 'inconnu'}`);
-    });
-  });
+// ### Liste des port avec leur vendorID + producID ###
+// SerialPort.list().then(ports => {
+//     ports.forEach(port => {
+//       console.log(`Port détecté : ${port.path} - ${port.vendorId || 'inconnu'} - ${port.productId || 'inconnu'}`);
+//     });
+//   });
 
 let currentPort = null;
 let currentPortPath = null;
@@ -50,7 +52,10 @@ function openSerialPort(portPath, baudRate = 115200) {
   });
 
   currentPort.on('data', data => {
-    console.log(`📨 Données reçues : ${data.toString()}`);
+    if(!data.toString().includes("|")){
+      console.log(`📨 Données reçues : ${data.toString().trim()}`);
+      runPythonScript("scripts/" + data.toString().trim() + ".yml")
+    }
   });
 
   currentPort.on('error', err => {
