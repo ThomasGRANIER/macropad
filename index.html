@@ -2,17 +2,16 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline';">
+
     <meta
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
-    <link rel="stylesheet" href="styles.css"> 
+    <link rel="stylesheet" href="styles.css">
     <title>SimplePAD</title>
   </head>
+  <body>
     <div id="Encodeurs">
       <div id="E1">
         <button id="E1-">E1-</button>
@@ -30,18 +29,41 @@
         <button id="L1C1">L1C1</button>
         <button id="L1C2">L1C2</button>
         <button id="L1C3">L1C3</button>
+        <button id="L1C4">L1C4</button>
       </div>
       <div id="L2">
         <button id="L2C1">L2C1</button>
         <button id="L2C2">L2C2</button>
         <button id="L1C3">L1C3</button>
+        <button id="L1C4">L1C4</button>
       </div>
       <div id="L3">
         <button id="L3C1">L3C1</button>
         <button id="L3C2">L3C2</button>
         <button id="L3C3">L3C3</button>
+        <button id="L3C4">L3C4</button>
+      </div>
+      <div id="L4">
+        <button id="L4C1">L4C1</button>
+        <button id="L4C2">L4C2</button>
+        <button id="L4C3">L4C3</button>
+        <button id="L4C4">L4C4</button>
+      </div>
+      <div id="L5">
+        <button id="L5C1">L5C1</button>
+        <button id="L5C2">L5C2</button>
+        <button id="L5C3">L5C3</button>
+        <button id="L5C4">L5C4</button>
       </div>
     </div>
   </body>
-  <script src="./renderer.js"></script>
+  <script>
+    const { ipcRenderer } = require('electron');
+
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        ipcRenderer.send('open-settings', btn.id);
+      });
+    });
+  </script>
 </html>

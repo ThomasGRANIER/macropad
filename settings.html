@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Paramètres</title>
+</head>
+<body>
+  <h1>Fenêtre de paramètres</h1>
+  <p>Contenu ici</p>
+  <p id="someElement"></p>
+  <button id="backBtn">Retour</button>
+</body>
+<script>
+  const { ipcRenderer } = require('electron');
+  document.getElementById('backBtn').addEventListener('click', () => {
+    ipcRenderer.send('go-back');
+  });
+  ipcRenderer.on('button-id', (event, btnId) => {
+    console.log('Bouton sélectionné:', btnId);
+    // Ici tu peux utiliser btnId pour afficher une info ou autre
+    document.getElementById('someElement').innerText = `Bouton cliqué : ${btnId}`;
+  });
+</script>
+</html>

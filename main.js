@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron/main')
+const { app, BrowserWindow, ipcMain } = require('electron/main')
 const fs = require('fs');
 const { openSerialPort, closeSerialPort } = require('./library/SerialManagement');
 
@@ -25,9 +25,13 @@ require('electron-reload')(__dirname, {
 const createWindow = () => {
   const win = new BrowserWindow({
     width: 800,
-    height: 600
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    }
   })
-
+  win.setMenu(null)
   win.loadFile('index.html')
 }
 
@@ -47,6 +51,27 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
+
+let clickedButtonId = null;
+
+ipcMain.on('open-settings', (event, btnId) => {
+  clickedButtonId = btnId;
+  const win = BrowserWindow.getFocusedWindow();
+  if (win) {
+    win.loadFile('settings.html');
+
+    win.webContents.once('did-finish-load', () => {
+      win.webContents.send('button-id', clickedButtonId);
+    });
+  }
+});
+
+ipcMain.on('go-back', (event) => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (win) {
+    win.loadFile('index.html');
+  }
+});
 
 app.whenReady().then(() => {
   openSerialPort(config.SerialPort, 115200);
