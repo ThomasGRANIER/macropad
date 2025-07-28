@@ -1,5 +1,5 @@
 const { SerialPort } = require('serialport');
-const { runPythonScript } = require('./ExecuteMacro');
+const { analyseYML } = require('./RunnerManager');
 
 // ### Liste des port avec leur vendorID + producID ###
 // SerialPort.list().then(ports => {
@@ -54,7 +54,7 @@ function openSerialPort(portPath, baudRate = 115200) {
   currentPort.on('data', data => {
     if(!data.toString().includes("|")){
       console.log(`📨 Données reçues : ${data.toString().trim()}`);
-      runPythonScript("scripts/" + data.toString().trim() + ".yml")
+      analyseYML("scripts/" + data.toString().trim() + ".yml")
     }
   });
 
