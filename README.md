@@ -38,3 +38,10 @@ Et pour les encodeurs voici la logique :
     - ...
 - Changement de profils
 - Affichage commande qui va être envoyé
+
+## Règles Yml
+| Type  | Value  | Description                                   |
+|:-----:|:------:|:----------------------------------------------|
+| key   | string | Exécute des touches de clavier (ex : "ctrl c")|
+| text  | string | Ecrit du text (ex: "hello world !")           |
+| delay | int    | Fais une pause en ms (ex: "100")              |
