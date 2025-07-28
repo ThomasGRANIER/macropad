@@ -1,0 +1,11 @@
+name: Connexion avec l'utilisateur Admin
+notification: false
+actions:
+  - type: text
+    value: "user\n"
+  - type: delay
+    value: 100
+  - type: text
+    value: "password\n"
+  - type: key
+    value: "ctrl c"
