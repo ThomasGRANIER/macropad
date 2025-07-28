@@ -8,26 +8,70 @@ const pythonPath = 'python3'; // ou 'python' selon ton système
 async function analyseYML(filePath){
   const fileContents = fs.readFileSync(filePath, 'utf8');
   const data = yaml.load(fileContents);
+  if(checkYmlCompliance(data))
+  {
+    if(data.notification){
+      console.log(data.name)
+    }
 
-  if(data.notification){
-    console.log(data.name)
-  }
-
-  for (let i = 0; i < data.actions.length; i++) {
-    switch (data.actions[i].type) {
-      case "key":
-        await runnerKey(data.actions[i].value)
-        break;
-      case "text":
-        await runnerText(data.actions[i].value)
-        break;
-      case "delay":
-        await runnerDelay(data.actions[i].value)
-        break;
-      default:
-        break;
+    for (let i = 0; i < data.actions.length; i++) {
+      switch (data.actions[i].type) {
+        case "key":
+          await runnerKey(data.actions[i].value)
+          break;
+        case "text":
+          await runnerText(data.actions[i].value)
+          break;
+        case "delay":
+          await runnerDelay(data.actions[i].value)
+          break;
+        default:
+          break;
+      }
     }
   }
+  else{
+    console.log("ERROR : Yml file not compliance")
+  }
+}
+
+function checkYmlCompliance(content){
+  if(content != undefined)
+  {
+    if(!('name' in content)){
+      console.log("ERROR : 'name' not found")
+      return false
+    }
+
+    if(!('notification' in content)){
+      console.log("ERROR : 'notification' not found")
+      return false
+    }
+
+    if(!('actions' in content)){
+      console.log("ERROR : 'actions' not found")
+      return false
+    }
+
+    for (let i = 0; i < content.actions.length; i++) {
+      if(!('type' in content.actions[i])){
+        console.log("ERROR : 'type' not found")
+        return false
+      }
+
+      if(!('value' in content.actions[i])){
+        console.log("ERROR : 'type' not found")
+        return false
+      }
+    }
+
+    return true
+  }
+  else{
+    console.log("ERROR : Yml empty")
+    return false
+  }
+
 }
 
 async function runnerKey(entry){
@@ -54,7 +98,7 @@ function runPythonScript(scriptPath, entry) {
       if (stderr) {
         console.error('Stderr :', stderr);
       }
-      console.log(stdout);
+      //console.log(stdout);
       resolve(stdout);
     });
   });
