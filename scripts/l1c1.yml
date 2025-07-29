@@ -1,8 +1,8 @@
 name: Connexion avec l'utilisateur Admin
-notification: false
+notification: true
 actions:
   - type: text
-    value: "user\n"
+    value: "user123\n"
   - type: delay
     value: 100
   - type: text

@@ -42,29 +42,30 @@ function openSerialPort(portPath, baudRate = 115200) {
 
   currentPort.open(err => {
     if (err) {
-      console.error('Erreur à l’ouverture du port :', err.message);
+      console.error('Erreur ouverture du port :', err.message);
       scheduleReconnect();
       return;
     }
 
-    console.log(`✅ Port série ouvert : ${portPath}`);
+    console.log(`Port série ouvert : ${portPath}`);
     clearReconnect();
   });
 
   currentPort.on('data', data => {
-    if(!data.toString().includes("|")){
-      console.log(`📨 Données reçues : ${data.toString().trim()}`);
-      analyseYML("scripts/" + data.toString().trim() + ".yml")
+    regex = /^l\d{1}c\d{1}$/
+    if(!data.toString().includes("|") && regex.test(data.toString().trim())){
+      console.log(`Données reçues : ${data.toString().trim()}`);
+      analyseYML("scripts/" + data.toString().trim() + ".yml", sendToSerialPort)
     }
   });
 
   currentPort.on('error', err => {
-    console.error('💥 Erreur du port série :', err.message);
+    console.error('Erreur du port série :', err.message);
     scheduleReconnect();
   });
 
   currentPort.on('close', () => {
-    console.warn(`⚠️ Port série fermé : ${portPath}`);
+    console.warn(`Port série fermé : ${portPath}`);
     scheduleReconnect();
   });
 }
@@ -78,7 +79,7 @@ function scheduleReconnect() {
   isTryingToReconnect = true;
 
   reconnectInterval = setInterval(() => {
-    console.log(`🔁 Tentative de reconnexion sur ${currentPortPath}...`);
+    console.log(`Tentative de reconnexion sur ${currentPortPath}...`);
     openSerialPort(currentPortPath, currentBaudRate);
   }, 3000); // toutes les 3 secondes
 }
@@ -106,6 +107,19 @@ function closeSerialPort() {
     });
   }
   clearReconnect();
+}
+
+function sendToSerialPort(message) {
+  if (currentPort && currentPort.isOpen) {
+    currentPort.write(message + '\n', err => {
+      if (err) {
+        return console.error('Erreur lors de l’envoi :', err.message);
+      }
+      console.log(`Message envoyé : ${message}`);
+    });
+  } else {
+    console.warn('Impossible d’envoyer le message : port non ouvert');
+  }
 }
 
 module.exports = {

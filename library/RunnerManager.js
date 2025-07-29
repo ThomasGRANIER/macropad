@@ -3,15 +3,16 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const path = require('path');
 
-const pythonPath = 'python3'; // ou 'python' selon ton système
+const pythonPath = 'python3.13.exe'; // ou 'python' selon ton système
 
-async function analyseYML(filePath){
+async function analyseYML(filePath, sendToSerialPort){
   const fileContents = fs.readFileSync(filePath, 'utf8');
   const data = yaml.load(fileContents);
   if(checkYmlCompliance(data))
   {
     if(data.notification){
       console.log(data.name)
+      sendToSerialPort(data.name)
     }
 
     for (let i = 0; i < data.actions.length; i++) {
