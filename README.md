@@ -45,3 +45,13 @@ Et pour les encodeurs voici la logique :
 | key   | string | Exécute des touches de clavier (ex : "ctrl c")|
 | text  | string | Ecrit du text (ex: "hello world !")           |
 | delay | int    | Fais une pause en ms (ex: "100")              |
+
+
+## Fichier config.js
+```json
+{
+    "SerialPort" : "",
+    "pythonCmd" : ""
+}
+
+```

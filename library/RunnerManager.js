@@ -3,7 +3,20 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const path = require('path');
 
-const pythonPath = 'python3.13.exe'; // ou 'python' selon ton système
+// Charger la config
+const configPath = path.join(__dirname, '../conf.json');
+let config;
+
+try {
+  const rawData = fs.readFileSync(configPath);
+  config = JSON.parse(rawData);
+  console.log("Configuration chargée :", config);
+} catch (err) {
+  console.error("Erreur de lecture du fichier de configuration :", err);
+}
+
+
+const pythonPath = config.pythonCmd; // ou 'python' selon ton système
 
 async function analyseYML(filePath, sendToSerialPort){
   const fileContents = fs.readFileSync(filePath, 'utf8');
