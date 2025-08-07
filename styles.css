@@ -1,8 +1,18 @@
 /* styles.css */
 body {
-    background-color: #001b3d;
+    background-color: #000b18;
     font-family: sans-serif;
-    margin: 0;
-    padding: 20px;
-  }
-  
+}
+
+#ProfilSelector {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+#MacroPad {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
