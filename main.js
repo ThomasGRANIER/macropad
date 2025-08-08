@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require('electron/main')
 const fs = require('fs');
 const { openSerialPort, closeSerialPort } = require('./library/SerialManagement');
 
+
 const path = require('path');
 
 // Charger la config

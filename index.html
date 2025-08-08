@@ -37,6 +37,7 @@
     </div>
   </body>
   <script>
+    const { regexButton, regexEncodeur} = require('./library/const')
     const container_buttons = document.getElementById('Boutons');
 
     for (let i = 1; i <= 5; i++) {
@@ -55,12 +56,6 @@
       }
     }
 
-    const { ipcRenderer } = require('electron');
-
-    document.querySelectorAll('button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        ipcRenderer.send('open-settings', btn.id);
-      });
-    });
+    
   </script>
 </html>

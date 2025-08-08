@@ -1,5 +1,6 @@
 const { SerialPort } = require('serialport');
 const { analyseYML } = require('./RunnerManager');
+const { regexButton, regexEncodeur} = require('./const')
 
 // ### Liste des port avec leur vendorID + producID ###
 // SerialPort.list().then(ports => {
@@ -52,8 +53,6 @@ function openSerialPort(portPath, baudRate = 115200) {
   });
 
   currentPort.on('data', data => {
-    regexButton = /^l\d{1}c\d{1}$/
-    regexEncodeur = /^e\d{1}(\+|-|B)$/
     if(!data.toString().includes("|") && (regexButton.test(data.toString().trim()) || regexEncodeur.test(data.toString().trim()))){
       console.log(`Données reçues : ${data.toString().trim()}`);
       analyseYML("scripts/" + data.toString().trim() + ".yml", sendToSerialPort)
