@@ -33,40 +33,28 @@
         </div>
       </div>
       <div id="Boutons">
-        <div id="L1">
-          <button id="L1C1">L1C1</button>
-          <button id="L1C2">L1C2</button>
-          <button id="L1C3">L1C3</button>
-          <button id="L1C4">L1C4</button>
-        </div>
-        <div id="L2">
-          <button id="L2C1">L2C1</button>
-          <button id="L2C2">L2C2</button>
-          <button id="L1C3">L1C3</button>
-          <button id="L1C4">L1C4</button>
-        </div>
-        <div id="L3">
-          <button id="L3C1">L3C1</button>
-          <button id="L3C2">L3C2</button>
-          <button id="L3C3">L3C3</button>
-          <button id="L3C4">L3C4</button>
-        </div>
-        <div id="L4">
-          <button id="L4C1">L4C1</button>
-          <button id="L4C2">L4C2</button>
-          <button id="L4C3">L4C3</button>
-          <button id="L4C4">L4C4</button>
-        </div>
-        <div id="L5">
-          <button id="L5C1">L5C1</button>
-          <button id="L5C2">L5C2</button>
-          <button id="L5C3">L5C3</button>
-          <button id="L5C4">L5C4</button>
-        </div>
       </div>
     </div>
   </body>
   <script>
+    const container_buttons = document.getElementById('Boutons');
+
+    for (let i = 1; i <= 5; i++) {
+      // Créer un conteneur pour la ligne
+      const container_buttons_L = document.createElement('div');
+      container_buttons_L.id = `L${i}`;
+      container_buttons.appendChild(container_buttons_L);
+
+      // Créer les boutons de la ligne
+      for (let y = 1; y <= 4; y++) {
+        const btn = document.createElement('button');
+        btn.textContent = `L${i}C${y}`;
+        btn.id = `L${i}C${y}`;
+
+        container_buttons_L.appendChild(btn);
+      }
+    }
+
     const { ipcRenderer } = require('electron');
 
     document.querySelectorAll('button').forEach(btn => {
