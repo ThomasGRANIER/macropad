@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>SimplePAD - Edit macro</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
+
+    <!-- JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/yaml/yaml.min.js"></script>
+  </head>
+  <body>
+    <h1 id="titre">Chargement...</h1>
+    <div id="editor" style="height:400px;border:1px solid #ccc;"></div>
+    <button id="save">💾 Sauvegarder</button>
+    <button id="retour">⬅ Retour</button>
+
+    <script>
+      const { ipcRenderer } = require('electron');
+      const fs = require('fs');
+      const path = require('path');
+
+      // ✅ Récupération du paramètre dans l’URL
+      const params = new URLSearchParams(window.location.search);
+      const btnId = params.get('btnId');
+
+      document.getElementById('titre').textContent = `Configuration du bouton ${btnId}`;
+
+      // ✅ Lecture du fichier YAML correspondant
+      console.log(btnId)
+      const filePath = path.join(__dirname, `../scripts/1/${btnId.toLowerCase()}.yml`);
+      let editor;
+
+      fs.readFile(filePath, 'utf-8', (err, data) => {
+        const content = err ? "# Erreur de lecture du fichier" : data;
+        editor = CodeMirror(document.getElementById('editor'), {
+          value: content,
+          mode: "yaml",
+          lineNumbers: true,
+          theme: "default",
+          readOnly: false,   // ✅ Assure que l'utilisateur peut écrire
+          lineWrapping: true // optionnel : pour sauter automatiquement les lignes longues
+        });
+        editor.setSize("100%", "400px");
+        editor.on('change', (instance, changeObj) => {
+        console.log("Le code a été modifié !");
+        // Par exemple :
+        // const newContent = instance.getValue();
+        // ipcRenderer.send('editor-changed', { btnId, newContent });
+      });
+      });
+
+      // ✅ Sauvegarde du contenu
+      document.getElementById('save').addEventListener('click', () => {
+        const content = editor.getValue();
+        fs.writeFile(filePath, content, err => {
+          if (err) console.error("Erreur sauvegarde :", err);
+        });
+      });
+
+      // ✅ Retour à l’accueil
+      document.getElementById('retour').addEventListener('click', () => {
+        ipcRenderer.send('go-back');
+      });
+    </script>
+  </body>
+</html>

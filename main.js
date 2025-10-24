@@ -32,7 +32,7 @@ const createWindow = () => {
       contextIsolation: false
     }
   })
-  win.setMenu(null)
+  // win.setMenu(null)
   win.loadFile('index.html')
 }
 
@@ -53,19 +53,13 @@ app.on('window-all-closed', () => {
   }
 })
 
-let clickedButtonId = null;
-
-ipcMain.on('open-settings', (event, btnId) => {
-  clickedButtonId = btnId;
+ipcMain.on('EditPage', (event, btnId) => {
   const win = BrowserWindow.getFocusedWindow();
   if (win) {
-    win.loadFile('settings.html');
-
-    win.webContents.once('did-finish-load', () => {
-      win.webContents.send('button-id', clickedButtonId);
-    });
+    win.loadFile('EditPage/EditPage.html', { query: { btnId } });
   }
 });
+
 
 ipcMain.on('go-back', (event) => {
   const win = BrowserWindow.getFocusedWindow();
