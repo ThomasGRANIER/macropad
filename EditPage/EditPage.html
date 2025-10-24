@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <title>SimplePAD - Edit macro</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel=stylesheet href="pastel-on-dark.css">
+
 
     <!-- CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
@@ -23,13 +25,13 @@
       const fs = require('fs');
       const path = require('path');
 
-      // ✅ Récupération du paramètre dans l’URL
+      // Récupération du paramètre dans l’URL
       const params = new URLSearchParams(window.location.search);
       const btnId = params.get('btnId');
 
       document.getElementById('titre').textContent = `Configuration du bouton ${btnId}`;
 
-      // ✅ Lecture du fichier YAML correspondant
+      // Lecture du fichier YAML correspondant
       console.log(btnId)
       const filePath = path.join(__dirname, `../scripts/1/${btnId.toLowerCase()}.yml`);
       let editor;
@@ -40,8 +42,8 @@
           value: content,
           mode: "yaml",
           lineNumbers: true,
-          theme: "default",
-          readOnly: false,   // ✅ Assure que l'utilisateur peut écrire
+          theme: "pastel-on-dark",
+          readOnly: false,   // Assure que l'utilisateur peut écrire
           lineWrapping: true // optionnel : pour sauter automatiquement les lignes longues
         });
         editor.setSize("100%", "400px");
@@ -53,7 +55,7 @@
       });
       });
 
-      // ✅ Sauvegarde du contenu
+      // Sauvegarde du contenu
       document.getElementById('save').addEventListener('click', () => {
         const content = editor.getValue();
         fs.writeFile(filePath, content, err => {
@@ -61,7 +63,7 @@
         });
       });
 
-      // ✅ Retour à l’accueil
+      // Retour à l’accueil
       document.getElementById('retour').addEventListener('click', () => {
         ipcRenderer.send('go-back');
       });
