@@ -55,7 +55,7 @@ function openSerialPort(portPath, baudRate = 115200) {
   currentPort.on('data', data => {
     if(!data.toString().includes("|") && (regexButton.test(data.toString().trim()) || regexEncodeur.test(data.toString().trim()))){
       console.log(`Données reçues : ${data.toString().trim()}`);
-      analyseYML("scripts/" + data.toString().trim() + ".yml", sendToSerialPort)
+      analyseYML("scripts/1/" + data.toString().trim() + ".yml", sendToSerialPort)
     }
   });
 
@@ -69,7 +69,6 @@ function openSerialPort(portPath, baudRate = 115200) {
     scheduleReconnect();
   });
 }
-
 /**
  * Programme une reconnexion automatique
  */

@@ -13,7 +13,6 @@
     <div id="Buttons">
       <p id="state" title="Etat">🟢</p>
       <button id="save" title="Sauvegarder">💾</button>
-      <button id="reset" title="Réinitialiser">♻️</button>
       <button id="retour" title="Quitter">✖️</button>
     </div>
   </div>
@@ -26,7 +25,7 @@
 
     // CodeMirror 6 imports
     const { EditorState } = require('@codemirror/state');
-    const { EditorView, keymap, lineNumbers } = require('@codemirror/view');
+    const { EditorView, keymap, lineNumbers, highlightActiveLine } = require('@codemirror/view');
     const { defaultKeymap, indentMore, indentLess } = require('@codemirror/commands');
     const { yaml } = require('@codemirror/lang-yaml');
     const { oneDark } = require('@codemirror/theme-one-dark');
@@ -93,6 +92,7 @@
         extensions: [
           yaml(),
           lineNumbers(),
+          highlightActiveLine(),
           keymap.of([
             ...defaultKeymap,
             { key: "Tab", preventDefault: true, run: indentMore },
@@ -140,6 +140,7 @@
     document.getElementById('save').addEventListener('click', () => {
       saveChanges()
     });
+
 
     // Retour à l’accueil
     document.getElementById('retour').addEventListener('click', async () => {

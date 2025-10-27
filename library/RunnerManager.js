@@ -39,6 +39,9 @@ async function analyseYML(filePath, sendToSerialPort){
         case "delay":
           await runnerDelay(data.actions[i].value)
           break;
+        case "cmd":
+          await runnerCmd(data.actions[i].value)
+          break;
         default:
           break;
       }
@@ -95,6 +98,11 @@ async function runnerKey(entry){
 
 async function runnerText(entry){
   const scriptPath = path.join(__dirname, 'Runners/RunnerText.py');
+  await runPythonScript(scriptPath, entry)
+}
+
+async function runnerCmd(entry){
+  const scriptPath = path.join(__dirname, 'Runners/RunnerCmd.py');
   await runPythonScript(scriptPath, entry)
 }
 

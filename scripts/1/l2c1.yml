@@ -1,0 +1,5 @@
+name: "test cmd"
+notification: true
+actions:
+  - type: cmd
+    value: "xset dpms force off"

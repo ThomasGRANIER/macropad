@@ -1,0 +1,5 @@
+name: "Copier coller
+notification: true
+actions:
+  - type: key 
+    value: "ctrl c"

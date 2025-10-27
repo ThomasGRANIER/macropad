@@ -7,10 +7,7 @@ is_windows = platform.system().lower() == 'windows'
 
 if len(sys.argv) > 1:
     text = sys.argv[1]
-    if is_windows:
-        pyautogui.write(text)
-    else:
-        subprocess.run(["xdotool", "type", text])
+    subprocess.Popen(text, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 else:
     print("Missing argument")
     sys.exit(1)
