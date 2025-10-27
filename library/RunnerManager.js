@@ -10,11 +10,10 @@ let config;
 try {
   const rawData = fs.readFileSync(configPath);
   config = JSON.parse(rawData);
-  console.log("Configuration chargée :", config);
+  console.log("Configuration chargée dans le RunnerManager.js :", config);
 } catch (err) {
   console.error("Erreur de lecture du fichier de configuration :", err);
 }
-
 
 const pythonPath = config.pythonCmd; // ou 'python' selon ton système
 

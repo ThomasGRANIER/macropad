@@ -12,7 +12,7 @@ let config;
 try {
   const rawData = fs.readFileSync(configPath);
   config = JSON.parse(rawData);
-  console.log("Configuration chargée :", config);
+  console.log("Configuration chargée dans le main.js:", config);
 } catch (err) {
   console.error("Erreur de lecture du fichier de configuration :", err);
 }
