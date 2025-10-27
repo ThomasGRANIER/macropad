@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron/main')
 const fs = require('fs');
 const { openSerialPort, closeSerialPort } = require('./library/SerialManagement');
-
+const { dialog } = require('electron');
 
 const path = require('path');
 
@@ -66,6 +66,19 @@ ipcMain.on('go-back', (event) => {
   if (win) {
     win.loadFile('index.html');
   }
+});
+
+ipcMain.handle('show-exit-dialog', async () => {
+  const result = await dialog.showMessageBox({
+    type: 'warning',
+    buttons: ['Annuler', 'Quitter sans sauvegarder', 'Sauvegarder et quitter'],
+    defaultId: 2, // sélection par défaut sur "Sauvegarder et quitter"
+    cancelId: 0,
+    title: 'Quitter',
+    message: 'Vous avez des modifications non sauvegardées. Que voulez-vous faire ?',
+  });
+
+  return result.response; // 0, 1 ou 2 selon le bouton cliqué
 });
 
 app.whenReady().then(() => {
