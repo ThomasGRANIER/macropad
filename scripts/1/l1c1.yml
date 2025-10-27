@@ -1,4 +1,4 @@
-name: Connexion avec l'utilisateur Admin
+name: "Connexion avec l'utilisateur Admin"
 notification: true
 actions:
   - type: text
