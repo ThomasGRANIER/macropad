@@ -7,5 +7,5 @@ actions:
     value: 100
   - type: text
     value: "password\n"
-  - type: key
+  - type: key 
     value: "ctrl c"

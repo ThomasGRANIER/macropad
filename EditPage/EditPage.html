@@ -5,15 +5,6 @@
   <meta charset="UTF-8" />
   <title>SimplePAD - Edit macro</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel=stylesheet href="pastel-on-dark.css">
-
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css">
-
-  <!-- JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/yaml/yaml.min.js"></script>
 </head>
 
 <body>
@@ -28,12 +19,19 @@
   </div>
   <div id="Editor"></div>
 
-  </div>
-
   <script>
     const { ipcRenderer } = require('electron');
     const fs = require('fs');
     const path = require('path');
+
+    // CodeMirror 6 imports
+    const { EditorState } = require('@codemirror/state');
+    const { EditorView, keymap, lineNumbers } = require('@codemirror/view');
+    const { defaultKeymap, indentMore, indentLess } = require('@codemirror/commands');
+    const { yaml } = require('@codemirror/lang-yaml');
+    const { oneDark } = require('@codemirror/theme-one-dark');
+    const { autocompletion, completeFromList } = require('@codemirror/autocomplete'); // <-- Ajout
+
 
     // On stocke le contenu original
     let originalContent = "";
@@ -46,31 +44,86 @@
     document.getElementById('titre').innerHTML = `Configuration du bouton <i>${btnId}</i>`;
 
     // Lecture du fichier YAML correspondant
-    console.log(btnId)
     const filePath = path.join(__dirname, `../scripts/1/${btnId.toLowerCase()}.yml`);
     let editor;
+    // 🔹 Fonction pour charger les complétions depuis le JSON
+    function loadCompletions() {
+      const jsonPath = path.join(__dirname, "autocomplete.json");
+      try {
+        const data = fs.readFileSync(jsonPath, "utf8");
+        const items = JSON.parse(data);
+        return items.map(item => ({
+          label: item.label,
+          type: "keyword",
+          info: item.info,
+          apply(view, completion, from, to) {
+            const line = view.state.doc.lineAt(from);
+            const indentMatch = line.text.match(/^(\s*)/); // récupère les espaces/tabs au début de la ligne
+            const currentIndent = indentMatch ? indentMatch[1] : "";
+
+            // On adapte le snippet pour qu'il suive l'indentation actuelle
+            const snippet = item.snippet.replace(/\n/g, "\n" + currentIndent + "  "); // +2 espaces pour la suite YAML
+
+            view.dispatch({
+              changes: { from, to, insert: snippet }
+            });
+          }
+        }));
+      } catch (err) {
+        console.error("Erreur chargement autocomplete.json :", err);
+        return [];
+      }
+    }
+
+    const completions = loadCompletions();
+
+    function myCompletions(context) {
+      const word = context.matchBefore(/\w*/);
+      if (!word || (word.from === word.to && !context.explicit)) return null;
+      return {
+        from: word.from,
+        options: completions
+      };
+    }
 
     fs.readFile(filePath, 'utf-8', (err, data) => {
       const content = err ? "# Erreur de lecture du fichier" : data;
-      editor = CodeMirror(document.getElementById('Editor'), {
-        value: content,
-        mode: "yaml",
-        lineNumbers: true,
-        theme: "pastel-on-dark",
-        readOnly: false,   // Assure que l'utilisateur peut écrire
-        lineWrapping: true // optionnel : pour sauter automatiquement les lignes longues
+      const editorState = EditorState.create({
+        doc: content,
+        extensions: [
+          yaml(),
+          lineNumbers(),
+          keymap.of([
+            ...defaultKeymap,
+            { key: "Tab", preventDefault: true, run: indentMore },
+            { key: "Shift-Tab", preventDefault: true, run: indentLess },
+          ]),
+          oneDark,
+          EditorView.lineWrapping,
+          autocompletion({ override: [myCompletions] }),
+          EditorView.theme({
+            "&": {height: "100%"}
+          }),
+          EditorView.updateListener.of(update => {
+            if (update.docChanged) {
+              const currentContent = update.state.doc.toString();
+              state = (currentContent === originalContent);
+              document.getElementById('state').textContent = state ? "🟢" : "🔴";
+            }
+          })
+        ]
       });
-      editor.setSize("100%", "100%");
-      originalContent=editor.getValue();
-      editor.on('change', (instance, changeObj) => {
-        const currentContent = instance.getValue();
-        state = (currentContent === originalContent);
-        document.getElementById('state').textContent = state ? "🟢" : "🔴";
+
+      editorView = new EditorView({
+        state: editorState,
+        parent: document.getElementById('Editor')
       });
+
+      originalContent = editorState.doc.toString();
     });
 
     function saveChanges() {
-      const content = editor.getValue();
+      const content = editorView.state.doc.toString();
       return new Promise((resolve, reject) => {
         fs.writeFile(filePath, content, err => {
           if (err) {

@@ -1,0 +1,27 @@
+[
+  {
+    "label": "name",
+    "info": "Nom de la macro",
+    "snippet": "name: \"\""
+  },
+  {
+    "label": "notification",
+    "info": "Booléen s'il y a une notification",
+    "snippet": "notification: true"
+  },
+  {
+    "label": "actions",
+    "info": "Liste des actions",
+    "snippet": "actions:\n- type: \n  value: \"\""
+  },
+  {
+    "label": "type",
+    "info": "Définit le type d’action du bouton",
+    "snippet": "type: \nvalue: \"\""
+  },
+  {
+    "label": "text",
+    "info": "Action de type text",
+    "snippet": "text"
+  }
+]
