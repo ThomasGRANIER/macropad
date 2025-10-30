@@ -1,39 +1,125 @@
-/* styles.css */
+/* CSS */
 body {
   background-color: #000b18;
   font-family: sans-serif;
   margin: 0;
   padding: 0;
+  color: white;
 }
 
-/* Sélecteur de profil en haut à gauche */
 #ProfilSelector {
   position: fixed;
   top: 10px;
   left: 10px;
 }
 
-/* Conteneur principal centré */
 #MacroPad {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Centre verticalement */
-  gap: 40px; /* Espace entre encodeurs et boutons */
+  height: 100vh;
+  gap: 80px;
 }
 
-/* Section encodeurs à gauche */
+/* Encodeurs */
 #Encodeurs {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 30px;
   align-items: center;
-  gap: 20px;
 }
 
-/* Section boutons à droite */
-#Boutons {
+.Encodeur {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+}
+
+.encodeurBtn {
+  width: 100px;       /* Largeur fixe */
+  height: 80px;       /* Hauteur fixe */
+  padding: 5px;
+  border: none;
+  border-radius: 8px;
+  background-color: #0d1b2a;
+  color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 5px;
+  text-align: center;
+  overflow: hidden;   /* empêche l'overflow */
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.encodeurBtn:hover {
+  background-color: #1b263b;
+}
+
+.encodeurBtn .title {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.encodeurBtn .desc {
+  font-size: 12px;
+  color: #d9d9d9;
+  text-align: center;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+/* Boutons macros */
+#Boutons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.Ligne {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.macroBtn {
+  width: 120px;      /* Largeur fixe */
+  height: 80px;      /* Hauteur fixe */
+  padding: 5px;
+  border: none;
+  border-radius: 8px;
+  background-color: #14213d;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  text-align: center;
+  overflow: hidden;
+  word-wrap: break-word;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.macroBtn:hover {
+  background-color: #1b263b;
+}
+
+.macroBtn .title {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.macroBtn .desc {
+  font-size: 12px;
+  color: #d9d9d9;
+  text-align: center;
+  overflow: hidden;
+  word-wrap: break-word;
 }

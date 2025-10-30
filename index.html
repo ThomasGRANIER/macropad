@@ -3,11 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline';">
-
-    <meta
-      http-equiv="X-Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
     <link rel="stylesheet" href="styles.css">
     <title>SimplePAD - Home</title>
   </head>
@@ -19,64 +15,117 @@
       <button id="AddProfil">+</button>
       <button id="SupprProfil">-</button>
     </div>
+
     <div id="MacroPad">
       <div id="Encodeurs">
-        <div id="E1" class="Encodeur">
-          <button id="E1-">E1-</button>
-          <button id="E1B">E1B</button>
-          <button id="E1+">E1+</button>
+        <div class="Encodeur">
+          <button id="E1-" class="encodeurBtn">
+            <span class="title">E1-</span>
+            <span class="desc">Description</span>
+          </button>
+          <button id="E1B" class="encodeurBtn">
+            <span class="title">E1B</span>
+            <span class="desc">Description</span>
+          </button>
+          <button id="E1+" class="encodeurBtn">
+            <span class="title">E1+</span>
+            <span class="desc">Description</span>
+          </button>
         </div>
-        <div id="E2" class="Encodeur">
-          <button id="E2-">E2-</button>
-          <button id="E2B">E2B</button>
-          <button id="E2+">E2+</button>
+        <div class="Encodeur">
+          <button id="E2-" class="encodeurBtn">
+            <span class="title">E2-</span>
+            <span class="desc">Description</span>
+          </button>
+          <button id="E2B" class="encodeurBtn">
+            <span class="title">E2B</span>
+            <span class="desc">Description</span>
+          </button>
+          <button id="E2+" class="encodeurBtn">
+            <span class="title">E2+</span>
+            <span class="desc">Description</span>
+          </button>
         </div>
       </div>
+
       <div id="Boutons">
-        <div id="L1">
-          <button id="L1C1">L1C1</button>
-          <button id="L1C2">L1C2</button>
-          <button id="L1C3">L1C3</button>
-          <button id="L1C4">L1C4</button>
+        <div class="Ligne">
+          <button id="L1C1" class="macroBtn"><span class="title">L1C1</span><span class="desc">Connexion avec l'utilisateur Admin</span></button>
+          <button id="L1C2" class="macroBtn"><span class="title">L1C2</span><span class="desc"></span></button>
+          <button id="L1C3" class="macroBtn"><span class="title">L1C3</span><span class="desc"></span></button>
+          <button id="L1C4" class="macroBtn"><span class="title">L1C4</span><span class="desc"></span></button>
         </div>
-        <div id="L2">
-          <button id="L2C1">L2C1</button>
-          <button id="L2C2">L2C2</button>
-          <button id="L2C3">L2C3</button>
-          <button id="L2C4">L2C4</button>
+        <div class="Ligne">
+          <button id="L2C1" class="macroBtn"><span class="title">L2C1</span><span class="desc"></span></button>
+          <button id="L2C2" class="macroBtn"><span class="title">L2C2</span><span class="desc"></span></button>
+          <button id="L2C3" class="macroBtn"><span class="title">L2C3</span><span class="desc"></span></button>
+          <button id="L2C4" class="macroBtn"><span class="title">L2C4</span><span class="desc"></span></button>
         </div>
-        <div id="L3">
-          <button id="L3C1">L3C1</button>
-          <button id="L3C2">L3C2</button>
-          <button id="L3C3">L3C3</button>
-          <button id="L3C4">L3C4</button>
+        <div class="Ligne">
+          <button id="L3C1" class="macroBtn"><span class="title">L3C1</span><span class="desc"></span></button>
+          <button id="L3C2" class="macroBtn"><span class="title">L3C2</span><span class="desc"></span></button>
+          <button id="L3C3" class="macroBtn"><span class="title">L3C3</span><span class="desc"></span></button>
+          <button id="L3C4" class="macroBtn"><span class="title">L3C4</span><span class="desc"></span></button>
         </div>
-        <div id="L4">
-          <button id="L4C1">L4C1</button>
-          <button id="L4C2">L4C2</button>
-          <button id="L4C3">L4C3</button>
-          <button id="L4C4">L4C4</button>
+        <div class="Ligne">
+          <button id="L4C1" class="macroBtn"><span class="title">L4C1</span><span class="desc"></span></button>
+          <button id="L4C2" class="macroBtn"><span class="title">L4C2</span><span class="desc"></span></button>
+          <button id="L4C3" class="macroBtn"><span class="title">L4C3</span><span class="desc"></span></button>
+          <button id="L4C4" class="macroBtn"><span class="title">L4C4</span><span class="desc"></span></button>
         </div>
-        <div id="L5">
-          <button id="L5C1">L5C1</button>
-          <button id="L5C2">L5C2</button>
-          <button id="L5C3">L5C3</button>
-          <button id="L5C4">L5C4</button>
+        <div class="Ligne">
+          <button id="L5C1" class="macroBtn"><span class="title">L5C1</span><span class="desc"></span></button>
+          <button id="L5C2" class="macroBtn"><span class="title">L5C2</span><span class="desc"></span></button>
+          <button id="L5C3" class="macroBtn"><span class="title">L5C3</span><span class="desc"></span></button>
+          <button id="L5C4" class="macroBtn"><span class="title">L5C4</span><span class="desc"></span></button>
         </div>
       </div>
     </div>
-  </body>
-  <script>
-    const { ipcRenderer } = require('electron');
 
-    window.addEventListener('DOMContentLoaded', () => {
-      const boutons = document.querySelectorAll('#Boutons button, #Encodeurs button');
+    <script>
+      const { ipcRenderer } = require('electron');
+      const fs = require('fs');
+      const path = require('path');
+      const yaml = require('js-yaml');
 
-      boutons.forEach(button => {
-        button.addEventListener('click', () => {
-          ipcRenderer.send('EditPage', button.id);
+      window.addEventListener('DOMContentLoaded', () => {
+        const boutons = document.querySelectorAll('#Boutons button, #Encodeurs button');
+
+        boutons.forEach(button => {
+          button.addEventListener('click', () => {
+            ipcRenderer.send('EditPage', button.id);
+          });
         });
       });
-    });
-  </script>
+
+      const scriptsFolder = path.join(__dirname, 'scripts/1');
+
+      window.addEventListener('DOMContentLoaded', () => {
+        const boutons = document.querySelectorAll('.macroBtn, .encodeurBtn');
+
+        boutons.forEach(btn => {
+          const btnId = btn.id.toLowerCase(); // ex: L1C1 ou E1B
+          const yamlFile = path.join(scriptsFolder, `${btnId}.yml`);
+
+          let name = 'non définie';
+
+          if (fs.existsSync(yamlFile)) {
+            try {
+              const fileContents = fs.readFileSync(yamlFile, 'utf8');
+              const data = yaml.load(fileContents);
+
+              if (data && data.name && data.name.trim() !== '') {
+                name = data.name;
+              }
+            } catch (err) {
+              console.error(`Erreur lecture YAML pour ${btnId}:`, err);
+            }
+          }
+
+          const desc = btn.querySelector('.desc');
+          if (desc) desc.textContent = name;
+        });
+      });
+    </script>
+  </body>
 </html>
