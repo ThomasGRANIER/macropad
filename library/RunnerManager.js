@@ -2,6 +2,9 @@ const { execFile } = require('child_process');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const path = require('path');
+const { logLevel, log } = require('./logs')
+
+let fileLog = "RunnerManager"
 
 // Charger la config
 const configPath = path.join(__dirname, '../conf.json');
@@ -10,7 +13,7 @@ let config;
 try {
   const rawData = fs.readFileSync(configPath);
   config = JSON.parse(rawData);
-  console.log("Configuration chargée dans le RunnerManager.js :", config);
+  log(logLevel.info,fileLog,`Configuration chargée : ${JSON.stringify(config)}`);
 } catch (err) {
   console.error("Erreur de lecture du fichier de configuration :", err);
 }
@@ -23,7 +26,7 @@ async function analyseYML(filePath, sendToSerialPort){
   if(checkYmlCompliance(data))
   {
     if(data.notification){
-      console.log(data.name)
+      log(logLevel.serial,fileLog,`Nom du script : ${data.name}`);
       sendToSerialPort(data.name)
     }
 
@@ -47,7 +50,7 @@ async function analyseYML(filePath, sendToSerialPort){
     }
   }
   else{
-    console.log("ERROR : Yml file not compliance")
+    log(logLevel.error,fileLog,"Yml file not compliance")
   }
 }
 
@@ -55,28 +58,28 @@ function checkYmlCompliance(content){
   if(content != undefined)
   {
     if(!('name' in content)){
-      console.log("ERROR : 'name' not found")
+      log(logLevel.error,fileLog,"'name' not found")
       return false
     }
 
     if(!('notification' in content)){
-      console.log("ERROR : 'notification' not found")
+      log(logLevel.error,fileLog,"'notification' not found")
       return false
     }
 
     if(!('actions' in content)){
-      console.log("ERROR : 'actions' not found")
+      log(logLevel.error,fileLog,"'actions' not found")
       return false
     }
 
     for (let i = 0; i < content.actions.length; i++) {
       if(!('type' in content.actions[i])){
-        console.log("ERROR : 'type' not found")
+        log(logLevel.error,fileLog,"'type' not found")
         return false
       }
 
       if(!('value' in content.actions[i])){
-        console.log("ERROR : 'type' not found")
+        log(logLevel.error,fileLog,"'value' not found")
         return false
       }
     }
@@ -84,7 +87,7 @@ function checkYmlCompliance(content){
     return true
   }
   else{
-    console.log("ERROR : Yml empty")
+    log(logLevel.error,fileLog,"Yml empty")
     return false
   }
 
@@ -119,7 +122,6 @@ function runPythonScript(scriptPath, entry) {
       if (stderr) {
         console.error('Stderr :', stderr);
       }
-      //console.log(stdout);
       resolve(stdout);
     });
   });

@@ -16,7 +16,6 @@
     ipcRenderer.send('go-back');
   });
   ipcRenderer.on('button-id', (event, btnId) => {
-    console.log('Bouton sélectionné:', btnId);
     // Ici tu peux utiliser btnId pour afficher une info ou autre
     document.getElementById('someElement').innerText = `Bouton cliqué : ${btnId}`;
   });

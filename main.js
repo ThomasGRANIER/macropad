@@ -2,8 +2,10 @@ const { app, BrowserWindow, ipcMain } = require('electron/main')
 const fs = require('fs');
 const { openSerialPort, closeSerialPort } = require('./library/SerialManagement');
 const { dialog } = require('electron');
-
 const path = require('path');
+const { logLevel, log } = require('./library/logs');
+
+let fileLog = "Main"
 
 // Charger la config
 const configPath = path.join(__dirname, 'conf.json');
@@ -12,7 +14,7 @@ let config;
 try {
   const rawData = fs.readFileSync(configPath);
   config = JSON.parse(rawData);
-  console.log("Configuration chargée dans le main.js:", config);
+  log(logLevel.info,fileLog,`Configuration chargée : ${JSON.stringify(config)}`);
 } catch (err) {
   console.error("Erreur de lecture du fichier de configuration :", err);
 }

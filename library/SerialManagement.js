@@ -1,6 +1,9 @@
 const { SerialPort } = require('serialport');
 const { analyseYML } = require('./RunnerManager');
 const { regexButton, regexEncodeur} = require('./const')
+const { logLevel, log } = require('./logs');
+
+let fileLog = "SerialManagement"
 
 // ### Liste des port avec leur vendorID + producID ###
 // SerialPort.list().then(ports => {
@@ -32,8 +35,7 @@ function openSerialPort(portPath, baudRate = 115200) {
     });
     currentPort = null;
   }
-
-  console.log(`Tentative d'ouverture du port : ${portPath}`);
+  log(logLevel.serial,fileLog,"`Tentative d'ouverture du port : ${portPath}`")
 
   currentPort = new SerialPort({
     path: portPath,
@@ -47,14 +49,13 @@ function openSerialPort(portPath, baudRate = 115200) {
       scheduleReconnect();
       return;
     }
-
-    console.log(`Port série ouvert : ${portPath}`);
+    log(logLevel.serial,fileLog,`Port série ouvert : ${portPath}`)
     clearReconnect();
   });
 
   currentPort.on('data', data => {
     if(!data.toString().includes("|") && (regexButton.test(data.toString().trim()) || regexEncodeur.test(data.toString().trim()))){
-      console.log(`Données reçues : ${data.toString().trim()}`);
+      log(logLevel.serial,fileLog,`Données reçues : ${data.toString().trim()}`)
       analyseYML("scripts/1/" + data.toString().trim() + ".yml", sendToSerialPort)
     }
   });
@@ -78,7 +79,7 @@ function scheduleReconnect() {
   isTryingToReconnect = true;
 
   reconnectInterval = setInterval(() => {
-    console.log(`Tentative de reconnexion sur ${currentPortPath}...`);
+    log(logLevel.serial, fileLog, `Tentative de reconnexion sur ${currentPortPath}...`)
     openSerialPort(currentPortPath, currentBaudRate);
   }, 3000); // toutes les 3 secondes
 }
@@ -114,7 +115,7 @@ function sendToSerialPort(message) {
       if (err) {
         return console.error('Erreur lors de l’envoi :', err.message);
       }
-      console.log(`Message envoyé : ${message}`);
+      log(logLevel.serial, fileLog, `Message envoyé : ${message}`)
     });
   } else {
     console.warn('Impossible d’envoyer le message : port non ouvert');
