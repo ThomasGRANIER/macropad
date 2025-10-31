@@ -10,7 +10,6 @@
   <body>
     <div id="ProfilSelector">
       <select name="Profils" id="Profils">
-        <option value="1">Profile 1</option>
       </select>
       <button id="AddProfil">+</button>
       <button id="SupprProfil">-</button>
@@ -87,20 +86,10 @@
       const fs = require('fs');
       const path = require('path');
       const yaml = require('js-yaml');
+      var currentProfile = undefined
 
-      window.addEventListener('DOMContentLoaded', () => {
-        const boutons = document.querySelectorAll('#Boutons button, #Encodeurs button');
-
-        boutons.forEach(button => {
-          button.addEventListener('click', () => {
-            ipcRenderer.send('EditPage', button.id);
-          });
-        });
-      });
-
-      const scriptsFolder = path.join(__dirname, 'scripts/1');
-
-      window.addEventListener('DOMContentLoaded', () => {
+      function updateTitleButton(profil){
+        const scriptsFolder = path.join(__dirname, `scripts/${profil}`);
         const boutons = document.querySelectorAll('.macroBtn, .encodeurBtn');
 
         boutons.forEach(btn => {
@@ -124,6 +113,43 @@
 
           const desc = btn.querySelector('.desc');
           if (desc) desc.textContent = name;
+        });
+      }
+
+      // Lire la valeur du profil actuel au chargement
+      window.addEventListener('DOMContentLoaded', async () => {
+        currentProfile = await ipcRenderer.invoke('get-profile');
+
+        selector = document.getElementById('Profils')
+        currentProfile.list.forEach(opt => {
+          const option = document.createElement('option')
+          option.value = opt
+          option.textContent = `Profile ${opt}`
+          selector.appendChild(option);
+        });
+        selector.getElementsByTagName('option')[currentProfile.current-1].selected = true;
+        updateTitleButton(currentProfile.current)
+      });
+
+      // Quand l’utilisateur change de profil dans le <select>
+      document.addEventListener('DOMContentLoaded', () => {
+        const select = document.getElementById('Profils');
+
+        select.addEventListener('change', (e) => {
+          const newProfile = e.target.value;
+          ipcRenderer.send('set-profile', newProfile);
+          currentProfile.current = newProfile
+          updateTitleButton(newProfile)
+        });
+      });
+
+      window.addEventListener('DOMContentLoaded', () => {
+        const boutons = document.querySelectorAll('#Boutons button, #Encodeurs button');
+
+        boutons.forEach(button => {
+          button.addEventListener('click', () => {
+            ipcRenderer.send('EditPage', { id: button.id, profile: currentProfile.current });
+          });
         });
       });
     </script>

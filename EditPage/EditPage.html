@@ -38,12 +38,13 @@
 
     // Récupération du paramètre dans l’URL
     const params = new URLSearchParams(window.location.search);
+    const currentProfile = params.get('profile')
     const btnId = params.get('btnId');
 
-    document.getElementById('titre').innerHTML = `Configuration du bouton <i>${btnId}</i>`;
+    document.getElementById('titre').innerHTML = `Configuration du bouton <i>${btnId} (P${currentProfile})</i>`;
 
     // Lecture du fichier YAML correspondant
-    const filePath = path.join(__dirname, `../scripts/1/${btnId.toLowerCase()}.yml`);
+    const filePath = path.join(__dirname, `../scripts/${currentProfile}/${btnId.toLowerCase()}.yml`);
     let editor;
     // 🔹 Fonction pour charger les complétions depuis le JSON
     function loadCompletions() {

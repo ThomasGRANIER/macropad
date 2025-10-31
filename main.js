@@ -1,11 +1,15 @@
 const { app, BrowserWindow, ipcMain } = require('electron/main')
 const fs = require('fs');
-const { openSerialPort, closeSerialPort } = require('./library/SerialManagement');
+const { openSerialPort, closeSerialPort, setProfile } = require('./library/SerialManagement');
 const { dialog } = require('electron');
 const path = require('path');
 const { logLevel, log } = require('./library/logs');
 
-let fileLog = "Main"
+let fileLog = "Main";
+let profile = {
+  current : 1,
+  list : [1,2]
+}
 
 // Charger la config
 const configPath = path.join(__dirname, 'conf.json');
@@ -49,16 +53,29 @@ app.whenReady().then(() => {
   })
 })
 
+// Permet au renderer de lire la valeur actuelle
+ipcMain.handle('get-profile', () => {
+  return profile;
+});
+
+// Permet au renderer de la modifier
+ipcMain.on('set-profile', (event, newProfile) => {
+  profile.current = parseInt(newProfile);
+  log(logLevel.info,fileLog, `Profil selectionné : ${profile.current}`)
+  //setProfile(profile.current)
+});
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
 })
 
-ipcMain.on('EditPage', (event, btnId) => {
+ipcMain.on('EditPage', (event, data) => {
+  const { id, profile } = data;
   const win = BrowserWindow.getFocusedWindow();
   if (win) {
-    win.loadFile('EditPage/EditPage.html', { query: { btnId } });
+    win.loadFile('EditPage/EditPage.html', { query: { btnId: id, profile: profile } });
   }
 });
 
@@ -84,5 +101,5 @@ ipcMain.handle('show-exit-dialog', async () => {
 });
 
 app.whenReady().then(() => {
-  openSerialPort(config.SerialPort, 115200);
+  openSerialPort(profile.current, config.SerialPort, 115200);
 });

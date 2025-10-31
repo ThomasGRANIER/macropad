@@ -4,6 +4,7 @@ const { regexButton, regexEncodeur} = require('./const')
 const { logLevel, log } = require('./logs');
 
 let fileLog = "SerialManagement"
+let currentProfile = undefined
 
 // ### Liste des port avec leur vendorID + producID ###
 // SerialPort.list().then(ports => {
@@ -11,6 +12,11 @@ let fileLog = "SerialManagement"
 //       console.log(`Port détecté : ${port.path} - ${port.vendorId || 'inconnu'} - ${port.productId || 'inconnu'}`);
 //     });
 //   });
+
+function setProfile(profile) {
+  currentProfile = profile;
+  log(logLevel.info, fileLog, `Profil mis à jour : ${profile}`);
+}
 
 let currentPort = null;
 let currentPortPath = null;
@@ -23,7 +29,8 @@ let reconnectInterval = null;
  * @param {string} portPath
  * @param {number} baudRate
  */
-function openSerialPort(portPath, baudRate = 115200) {
+function openSerialPort(profile, portPath, baudRate = 115200) {
+  currentProfile = profile
   currentPortPath = portPath;
   currentBaudRate = baudRate;
 
@@ -56,7 +63,7 @@ function openSerialPort(portPath, baudRate = 115200) {
   currentPort.on('data', data => {
     if(!data.toString().includes("|") && (regexButton.test(data.toString().trim()) || regexEncodeur.test(data.toString().trim()))){
       log(logLevel.serial,fileLog,`Données reçues : ${data.toString().trim()}`)
-      analyseYML("scripts/1/" + data.toString().trim() + ".yml", sendToSerialPort)
+      analyseYML("scripts/"+currentProfile+"/" + data.toString().trim() + ".yml", sendToSerialPort)
     }
   });
 
@@ -125,4 +132,5 @@ function sendToSerialPort(message) {
 module.exports = {
   openSerialPort,
   closeSerialPort,
+  setProfile
 };
