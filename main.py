@@ -72,7 +72,11 @@ def show_macro_grid():
     frame = ttk.Frame(root, padding=10)
     frame.pack(fill="both", expand=True)
 
-    max_row, max_col = 4, 4
+    if os.path.exists(CONFIG_FILE):
+            with open(CONFIG_FILE, "r", encoding="utf-8") as f:
+                cfg = yaml.safe_load(f) or {}
+                max_row = cfg.get("nb_ligne")
+                max_col = cfg.get("nb_column")
 
     # Crée une frame pour le grid + bouton en haut
     top_frame = ttk.Frame(frame)
