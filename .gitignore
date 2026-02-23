@@ -1,3 +1,4 @@
 __pycache__
 profiles/*
 !profiles/1/example.yml
+a_ignorer
