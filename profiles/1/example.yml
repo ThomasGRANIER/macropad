@@ -1,0 +1,11 @@
+name: "Exemple de tout les types "
+notification: true
+actions:
+  - type: text
+    value: "hello world"
+  - type: delay
+    value: 100
+  - type: cmd
+    value: "echo hello"
+  - type: key
+    value: "a"

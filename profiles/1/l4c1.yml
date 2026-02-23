@@ -1,5 +1,0 @@
-name: "Début commande pytest"
-notification: true
-actions:
-  - type: text
-    value: 'clear;pytest --alluredir=allure-results -vs -m ""'
