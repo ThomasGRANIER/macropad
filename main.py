@@ -77,6 +77,8 @@ def show_macro_grid():
                 cfg = yaml.safe_load(f) or {}
                 max_row = cfg.get("nb_ligne")
                 max_col = cfg.get("nb_column")
+                serial_port = cfg.get("serial_port").split("/")[-1]
+                root.title(f"Disposition du macropad ({serial_port})")
 
     # Crée une frame pour le grid + bouton en haut
     top_frame = ttk.Frame(frame)
