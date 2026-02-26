@@ -1,5 +1,6 @@
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 import tkinter as tk
-from tkinter import ttk
 import serial.tools.list_ports
 
 from library.yaml_manager import YamlManager
@@ -10,8 +11,11 @@ class UIManager:
     def __init__(self, yaml_manager: YamlManager, serial_manager: SerialManager):
         self.yaml_manager = yaml_manager
         self.serial_manager = serial_manager
-        self.root = tk.Tk()
 
+        # IMPORTANT : ne PAS créer tk.Tk() avant
+        self.root = ttk.Window(themename="darkly")
+
+        self.labels = {}
     # -------------------------
 
     def open_config_window(self) -> None:
@@ -50,9 +54,14 @@ class UIManager:
 
     # -------------------------
 
+    def refresh_grid_titles(self) -> None:
+        for pos, label in self.labels.items():
+            new_name = self.yaml_manager.get_macro_name(pos)
+            label.config(text=new_name)
+
     def build_grid(self) -> None:
         self.root.title("Disposition du macropad")
-        self.root.geometry("1000x500")
+        self.root.geometry("900x500")
 
         frame = ttk.Frame(self.root, padding=10)
         frame.pack(fill="both", expand=True)
@@ -62,7 +71,7 @@ class UIManager:
         top_frame = ttk.Frame(frame)
         top_frame.pack(fill="both", expand=True)
 
-        grid_tools = ttk.LabelFrame(top_frame, text="Tools")
+        grid_tools = ttk.Label(top_frame)
         grid_tools.pack(side="right", fill="both", expand=True)
 
         grid_frame = ttk.Frame(top_frame)
@@ -70,23 +79,33 @@ class UIManager:
 
         ttk.Button(
             grid_tools,
+            text="↻",
+            bootstyle="outline-light",
+            command=self.refresh_grid_titles
+        ).pack(side="top", anchor="n", padx=5, pady=(5, 2), fill="x")
+
+        ttk.Button(
+            grid_tools,
             text="⚙",
+            bootstyle="outline-light",
             command=self.open_config_window
-        ).pack(side="top", anchor="n", padx=5, pady=5)
+        ).pack(side="top", anchor="n", padx=5, pady=(2, 5), fill="x")
 
         for l in range(1, max_row + 1):
             for c in range(1, max_col + 1):
                 pos = f"l{l}c{c}"
-                label_frame = ttk.LabelFrame(
+                label_frame = ttk.Frame(
                     grid_frame,
-                    text=pos.upper(),
-                    padding=5
+                    bootstyle="secondary",
+                    padding=1,
+                    borderwidth=1,
+                    relief="solid"
                 )
                 label_frame.grid(
                     row=l - 1,
                     column=c - 1,
-                    padx=3,
-                    pady=3,
+                    padx=6,
+                    pady=6,
                     sticky="nsew"
                 )
 
@@ -97,12 +116,13 @@ class UIManager:
                     wraplength=180
                 )
                 name_label.pack(expand=True, fill="both")
+                self.labels[pos] = name_label
 
         for i in range(max_row):
-            grid_frame.rowconfigure(i, weight=1)
+            grid_frame.rowconfigure(i, weight=1, uniform="row")
 
         for j in range(max_col):
-            grid_frame.columnconfigure(j, weight=1)
+            grid_frame.columnconfigure(j, weight=1, uniform="col")
 
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
 
