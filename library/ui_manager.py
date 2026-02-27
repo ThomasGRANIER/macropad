@@ -49,7 +49,7 @@ class UIManager:
                 self.yaml_manager.save_config()
                 win.destroy()
 
-        ttk.Button(win, text="Enregistrer",
+        ttk.Button(win, text="Enregistrer",bootstyle="outline-light",
                    command=save_selection).pack(pady=5)
 
     # -------------------------
