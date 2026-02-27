@@ -53,17 +53,26 @@ class SerialManager:
 
             self.connect()
 
-            if self.ser and self.ser.is_open and self.ser.in_waiting > 0:
-                data = self.ser.readline().decode(errors="ignore").strip()
-                if data:
-                    if len(data) > 1 and "|" not in data:
-                        print_log(typeLog.info, f"{data} reçu")
-                        self.macro_manager.execute_actions(data)
-            else:
-                time.sleep(0.05)
+            if not self.ser:
+                time.sleep(0.2)
+                continue
 
-        self.close()
-        print_log(typeLog.info, f"Arrêt du SerialManager")
+            try:
+                if self.ser.is_open and self.ser.in_waiting > 0:
+                    data = self.ser.readline().decode(errors="ignore").strip()
+
+                    if data:
+                        self.macro_manager.execute_actions(data)
+                else:
+                    time.sleep(0.05)
+
+            except (OSError, serial.SerialException) as e:
+                print_log(typeLog.warning, f"Port série déconnecté : {e}")
+
+                # Force la reconnexion
+                self.close()
+                self.current_port = None
+                time.sleep(0.5)
 
     def stop(self) -> None:
         self.stop_flag = True

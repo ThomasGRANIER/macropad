@@ -23,24 +23,55 @@ class UIManager:
         win.title("Configuration du port")
         win.geometry("500x400")
 
-        ports_listbox = tk.Listbox(win, width=50)
-        ports_listbox.pack(padx=10, pady=10, fill="both", expand=True)
+        # Frame principale
+        main_frame = ttk.Frame(win)
+        main_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
-        ports = list(serial.tools.list_ports.comports())
+        ports_listbox = tk.Listbox(main_frame)
+        ports_listbox.pack(fill="both", expand=True)
 
-        for p in ports:
-            ports_listbox.insert(
-                tk.END,
-                f"{p.device} - {p.description} - {p.hwid}"
-            )
+        # On stocke la liste courante des ports
+        ports = []
 
-        saved_port = self.yaml_manager.get_serial_port()
+        # -------------------------
+        # Refresh function
+        # -------------------------
+        def refresh_ports():
+            nonlocal ports
 
-        for i, p in enumerate(ports):
-            if p.device == saved_port:
-                ports_listbox.selection_set(i)
-                break
+            # Sauvegarde sélection actuelle
+            selected_device = None
+            sel = ports_listbox.curselection()
+            if sel and sel[0] < len(ports):
+                selected_device = ports[sel[0]].device
 
+            ports_listbox.delete(0, tk.END)
+            ports = list(serial.tools.list_ports.comports())
+
+            for p in ports:
+                ports_listbox.insert(
+                    tk.END,
+                    f"{p.device} - {p.description} - {p.hwid}"
+                )
+
+            # Restaure sélection sauvegardée
+            if selected_device:
+                for i, p in enumerate(ports):
+                    if p.device == selected_device:
+                        ports_listbox.selection_set(i)
+                        break
+
+            # Sinon sélectionne port sauvegardé en config
+            else:
+                saved_port = self.yaml_manager.get_serial_port()
+                for i, p in enumerate(ports):
+                    if p.device == saved_port:
+                        ports_listbox.selection_set(i)
+                        break
+
+        # -------------------------
+        # Save selection
+        # -------------------------
         def save_selection():
             sel = ports_listbox.curselection()
             if sel:
@@ -49,8 +80,29 @@ class UIManager:
                 self.yaml_manager.save_config()
                 win.destroy()
 
-        ttk.Button(win, text="Enregistrer",bootstyle="outline-light",
-                   command=save_selection).pack(pady=5)
+        # -------------------------
+        # Boutons
+        # -------------------------
+
+        buttons_frame = ttk.Frame(win)
+        buttons_frame.pack(fill="x", pady=5)
+
+        ttk.Button(
+            buttons_frame,
+            text="Actualiser",
+            bootstyle="outline-info",
+            command=refresh_ports
+        ).pack(side="left", padx=5)
+
+        ttk.Button(
+            buttons_frame,
+            text="Enregistrer",
+            bootstyle="outline-light",
+            command=save_selection
+        ).pack(side="right", padx=5)
+
+        # Chargement initial
+        refresh_ports()
 
     # -------------------------
 
@@ -71,7 +123,7 @@ class UIManager:
         top_frame = ttk.Frame(frame)
         top_frame.pack(fill="both", expand=True)
 
-        grid_tools = ttk.Label(top_frame)
+        grid_tools = ttk.Frame(top_frame, padding=1)
         grid_tools.pack(side="right", fill="both", expand=True)
 
         grid_frame = ttk.Frame(top_frame)

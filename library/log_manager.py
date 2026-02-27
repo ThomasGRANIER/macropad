@@ -3,7 +3,7 @@ import datetime
 class typeLog:
     info = "INFO"
     debug = "DEBUG"
-    waring = "WARNING"
+    warning = "WARNING"
     error = "ERROR"
 
 def print_log(type: str, content: str) -> None:
