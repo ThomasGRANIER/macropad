@@ -3,10 +3,12 @@ from library.yaml_manager import YamlManager
 from library.serial_manager import SerialManager
 from library.ui_manager import UIManager
 from library.macro_manager import MacroManager
+from library.log_manager import init_log
 
-DEBUG = False
+DEBUG = True
 
 def main():
+    init_log()
     yaml_manager = YamlManager(debug=DEBUG)
     macro_manager = MacroManager(yaml_manager, debug=DEBUG)
     serial_manager = SerialManager(yaml_manager, macro_manager, debug=DEBUG)
