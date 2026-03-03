@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import yaml
 import subprocess
 
@@ -50,8 +51,12 @@ class YamlManager:
     # -------------------------
 
     def open_editor(self, file: str) -> None:
-        file_path = f"profiles/{self.profile}/{file}.yml"
+        file_path = Path(f"profiles/{self.profile}/{file}.yml")
         print_log(typeLog.info, f"Ouverture du fichier {file_path} dans l'editeur")
+
+        if not file_path.exists():
+            file_path.touch()
+
         subprocess.Popen(["gio","open", file_path])
 
     def load_yaml_file(self, file_path) -> dict:

@@ -157,7 +157,7 @@ class UIManager:
                     grid_frame,
                     text=self.yaml_manager.get_macro_name(pos),
                     bootstyle="outline-light",
-                    command=lambda p=pos: self.yaml_manager.open_editor(pos)
+                    command=lambda p=pos: self.yaml_manager.open_editor(p)
                 )
 
                 button.grid(
