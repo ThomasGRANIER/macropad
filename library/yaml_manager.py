@@ -1,5 +1,6 @@
 import os
 import yaml
+import subprocess
 
 from library.log_manager import print_log, typeLog
 
@@ -48,24 +49,56 @@ class YamlManager:
     # MACROS
     # -------------------------
 
+    def open_editor(self, file: str) -> None:
+        file_path = f"profiles/{self.profile}/{file}.yml"
+        print_log(typeLog.info, f"Ouverture du fichier {file_path} dans l'editeur")
+        subprocess.Popen(["gio","open", file_path])
+
     def load_yaml_file(self, file_path) -> dict:
         if self.debug:
             print_log(typeLog.debug, f"Lecture du yaml {file_path}")
         with open(file_path, "r", encoding="utf-8") as f:
             return yaml.safe_load(f)
 
-    def get_macro_name(self, pos) -> str:
+    def get_macro_name(self, pos: str, max_chars_per_line: int=15) -> str:
         if self.debug:
             print_log(typeLog.debug, f"Récupération du nom de la macro {pos}")
         filename = f"profiles/{self.profile}/{pos}.yml"
         if not os.path.exists(filename):
             return ""
+
         try:
             data = self.load_yaml_file(filename) or {}
-            name = data.get("name", "")
+            name = data.get("name", "").strip()
+
+            if not name:
+                return ""
+
+            words = name.split(" ")
+            lines = []
+            current_line = ""
+
+            for word in words:
+                # Si on peut ajouter le mot à la ligne actuelle
+                if len(current_line) + len(word) + (1 if current_line else 0) <= max_chars_per_line:
+                    if current_line:
+                        current_line += " "
+                    current_line += word
+                else:
+                    # Sinon, on ferme la ligne et commence une nouvelle
+                    if current_line:
+                        lines.append(current_line)
+                    current_line = word
+
+            if current_line:
+                lines.append(current_line)
+
+            wrapped_name = "\n".join(lines)
+
             if self.debug:
-                print_log(typeLog.debug, f"Nom récupéré : {name}")
-            return name
+                print_log(typeLog.debug, f"Nom récupéré (avec retour à la ligne propre) : {wrapped_name}")
+            return wrapped_name
+
         except Exception:
             return ""
 

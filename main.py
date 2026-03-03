@@ -5,7 +5,7 @@ from library.ui_manager import UIManager
 from library.macro_manager import MacroManager
 from library.log_manager import init_log
 
-DEBUG = True
+DEBUG = False
 
 def main():
     init_log()

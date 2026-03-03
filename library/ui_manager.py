@@ -141,34 +141,33 @@ class UIManager:
             text="⚙",
             bootstyle="outline-light",
             command=self.open_config_window
-        ).pack(side="top", anchor="n", padx=5, pady=(2, 5), fill="x")
+        ).pack(side="top", anchor="s", padx=5, pady=(2, 5), fill="x")
+
+        ttk.Button(
+            grid_tools,
+            text="X",
+            bootstyle="outline-light",
+            command=self.root.destroy
+        ).pack(side="bottom", anchor="n", padx=5, pady=(2, 5), fill="x")
 
         for l in range(1, max_row + 1):
             for c in range(1, max_col + 1):
                 pos = f"l{l}c{c}"
-                label_frame = ttk.Frame(
+                button = ttk.Button(
                     grid_frame,
-                    bootstyle="secondary",
-                    padding=1,
-                    borderwidth=1,
-                    relief="solid"
+                    text=self.yaml_manager.get_macro_name(pos),
+                    bootstyle="outline-light",
+                    command=lambda p=pos: self.yaml_manager.open_editor(pos)
                 )
-                label_frame.grid(
+
+                button.grid(
                     row=l - 1,
                     column=c - 1,
                     padx=6,
                     pady=6,
                     sticky="nsew"
                 )
-
-                name_label = ttk.Label(
-                    label_frame,
-                    text=self.yaml_manager.get_macro_name(pos),
-                    anchor="center",
-                    wraplength=180
-                )
-                name_label.pack(expand=True, fill="both")
-                self.labels[pos] = name_label
+                self.labels[pos] = button
 
         for i in range(max_row):
             grid_frame.rowconfigure(i, weight=1, uniform="row")
