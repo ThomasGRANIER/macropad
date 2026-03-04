@@ -15,8 +15,9 @@ def init_log() -> None:
     os.makedirs(NAME_FOLDER, exist_ok=True)
 
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S").replace(" ","_")
-    NAME_FILE = f"{NAME_FOLDER}/log_{timestamp}.log"
-    open(NAME_FILE,"a").close()
+    NAME_FILE = f"{NAME_FOLDER}/macropad.log"
+    with open(NAME_FILE,"a") as f:
+        f.write("-" * 65 + "\n")
 
 def print_log(type: str, content: str) -> None:
     timestamp = datetime.datetime.now()
