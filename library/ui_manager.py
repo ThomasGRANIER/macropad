@@ -123,18 +123,70 @@ class UIManager:
         top_frame = ttk.Frame(frame)
         top_frame.pack(fill="both", expand=True)
 
-        grid_tools = ttk.Frame(top_frame, padding=1)
-        grid_tools.pack(side="right", fill="both", expand=True)
+        encoders_frame = ttk.Frame(top_frame)
+        encoders_frame.pack(side="left", fill="y", padx=(0, 10))
 
         grid_frame = ttk.Frame(top_frame)
         grid_frame.pack(side="left", fill="both", expand=True)
 
+        grid_tools = ttk.Frame(top_frame, padding=1)
+        grid_tools.pack(side="right", fill="y")
+
+        ttk.Label(
+            encoders_frame,
+            text="E1",
+            font=("Segoe UI", 10, "bold")
+        ).pack(pady=(0, 4))
+
+        encoder1_buttons = [
+            ("↺", "e1-"),
+            ("↻", "e1+"),
+            ("⏺", "e1b"),
+        ]
+
+        for text, key in encoder1_buttons:
+            ttk.Button(
+                encoders_frame,
+                text=text,
+                bootstyle="outline-light",
+                command=lambda k=key: self.yaml_manager.open_editor(k)
+            ).pack(fill="x", pady=3)
+
+        # Séparateur visuel
+        ttk.Separator(encoders_frame).pack(fill="x", pady=15)
+
+        ttk.Label(
+            encoders_frame,
+            text="E2",
+            font=("Segoe UI", 10, "bold")
+        ).pack(pady=(0, 4))
+
+        encoder2_buttons = [
+            ("↺", "e2-"),
+            ("↻", "e2+"),
+            ("⏺", "e2b"),
+        ]
+
+        for text, key in encoder2_buttons:
+            ttk.Button(
+                encoders_frame,
+                text=text,
+                bootstyle="outline-light",
+                command=lambda k=key: self.yaml_manager.open_editor(k)
+            ).pack(fill="x", pady=3)
+
+        ttk.Label(
+            grid_tools,
+            text="🛠",
+            font=("Segoe UI", 14)
+        ).pack(side="top", pady=(0, 4))
+
         ttk.Button(
             grid_tools,
-            text="↻",
+            text="⟳",
             bootstyle="outline-light",
             command=self.refresh_grid_titles
-        ).pack(side="top", anchor="n", padx=5, pady=(5, 2), fill="x")
+        ).pack(side="top", fill="x", padx=5, pady=(0, 5))
 
         ttk.Button(
             grid_tools,
