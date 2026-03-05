@@ -4,11 +4,10 @@ import tkinter as tk
 import serial.tools.list_ports
 
 from library.yaml_manager import YamlManager
-from library.serial_manager import SerialManager
 
 
 class UIManager:
-    def __init__(self, yaml_manager: YamlManager, serial_manager: SerialManager):
+    def __init__(self, yaml_manager: YamlManager, serial_manager=None):
         self.yaml_manager = yaml_manager
         self.serial_manager = serial_manager
 
@@ -111,8 +110,11 @@ class UIManager:
             new_name = self.yaml_manager.get_macro_name(pos)
             label.config(text=new_name)
 
+    def edit_title(self, content: str) -> None:
+        self.root.title(f"Disposition du macropad - {content}")
+
     def build_grid(self) -> None:
-        self.root.title("Disposition du macropad")
+        self.root.title("Disposition du macropad - Démarrage")
         self.root.geometry("900x500")
 
         frame = ttk.Frame(self.root, padding=10)
@@ -232,7 +234,8 @@ class UIManager:
     # -------------------------
 
     def on_close(self) -> None:
-        self.serial_manager.stop()
+        if self.serial_manager:
+            self.serial_manager.stop()
         self.root.destroy()
 
     def run(self) -> None:

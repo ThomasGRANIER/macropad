@@ -11,8 +11,9 @@ def main():
     init_log()
     yaml_manager = YamlManager(debug=DEBUG)
     macro_manager = MacroManager(yaml_manager, debug=DEBUG)
-    serial_manager = SerialManager(yaml_manager, macro_manager, debug=DEBUG)
-    ui_manager = UIManager(yaml_manager, serial_manager)
+    ui_manager = UIManager(yaml_manager)
+    serial_manager = SerialManager(yaml_manager, macro_manager, ui_manager)
+    ui_manager.serial_manager = serial_manager
 
     serial_thread = threading.Thread(
         target=serial_manager.listen_loop,

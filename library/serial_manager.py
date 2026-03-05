@@ -4,17 +4,21 @@ import time
 from library.yaml_manager import YamlManager
 from library.log_manager import print_log, typeLog
 from library.macro_manager import MacroManager
+from library.ui_manager import UIManager
 
 class SerialManager:
-    def __init__(self, yaml_manager: YamlManager, macro_manager: MacroManager, baudrate: int=115200, debug: bool=False):
+    def __init__(self, yaml_manager: YamlManager, macro_manager: MacroManager, ui_manager: UIManager, baudrate: int=115200, debug: bool=False) -> None:
         self.yaml_manager = yaml_manager
         self.macro_manager = macro_manager
         self.baudrate = baudrate
         self.debug = debug
+        self.ui_manager = ui_manager
 
         self.ser = None
         self.current_port = None
         self.stop_flag = False
+
+        self._last_status = False
 
     # -------------------------
 
@@ -25,16 +29,27 @@ class SerialManager:
             self.close()
 
             if not port:
+                self.ui_manager.edit_title(f"Déconnecté (Aucun port selectionné)")
                 return
 
             try:
                 self.ser = serial.Serial(port, self.baudrate, timeout=0.1)
                 self.current_port = port
                 print_log(typeLog.info, f"Connecté à {port}")
+
+                self.ui_manager.edit_title(f"Connecté ({port})")
+
+                self._last_status = True
+
             except serial.SerialException as e:
-                print_log(typeLog.error, f"Impossible d'ouvrir {port} : {e}")
                 self.ser = None
                 self.current_port = None
+
+                if self._last_status :
+                    print_log(typeLog.error, f"Impossible d'ouvrir {port} : {e}")
+                    self.ui_manager.edit_title(f"Déconnecté ({port})")
+                    self._last_status = False
+
                 time.sleep(0.5)
 
     def close(self) -> None:
@@ -44,7 +59,6 @@ class SerialManager:
             except Exception:
                 pass
         self.ser = None
-
     # -------------------------
 
     def listen_loop(self) -> None:
