@@ -4,4 +4,4 @@ software for macropad in electron
 ## TO-DO
 - Faire fonctionner avec le bluetooth
 - Afficher la batterie ?
-- Afficher le port utiliser dans le titre
+- Ajouter bouton pour clean logs dans settings
