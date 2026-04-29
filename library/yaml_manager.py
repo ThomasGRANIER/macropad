@@ -107,7 +107,8 @@ class YamlManager:
         except Exception:
             return ""
 
-    def get_macro_actions(self, key_name) -> dict:
+    def get_macro_actions(self, key_name: str) -> dict:
+        key_name = key_name.lower()
         if self.debug:
             print_log(typeLog.debug, f"Checher fichier lié à la {key_name} reçu")
         filename = f"profiles/{self.profile}/{key_name}.yml"
