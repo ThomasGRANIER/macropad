@@ -45,11 +45,6 @@ class BLEManager:
         except Exception as e:
             print_log(typeLog.error, f"BLE: Erreur scan : {e}")
 
-        address = self.yaml_manager.get_ble_address()
-        if address:
-            print_log(typeLog.info, f"BLE: Scan infructueux, tentative directe sur {address}")
-            return address
-
         return None
 
     async def _run_async(self) -> None:

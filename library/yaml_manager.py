@@ -33,9 +33,6 @@ class YamlManager:
         with open(self.config_file, "w", encoding="utf-8") as f:
             yaml.dump(self.config, f)
 
-    def get_ble_address(self) -> str:
-        return self.config.get("ble_address", "")
-
     def get_serial_port(self) -> str:
         port = self.config["serial_port"]
         if self.debug:
