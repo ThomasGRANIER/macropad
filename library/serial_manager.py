@@ -7,12 +7,13 @@ from library.macro_manager import MacroManager
 from library.ui_manager import UIManager
 
 class SerialManager:
-    def __init__(self, yaml_manager: YamlManager, macro_manager: MacroManager, ui_manager: UIManager, baudrate: int=115200, debug: bool=False) -> None:
+    def __init__(self, yaml_manager: YamlManager, macro_manager: MacroManager, ui_manager: UIManager, baudrate: int=115200, debug: bool=False, ble_manager=None) -> None:
         self.yaml_manager = yaml_manager
         self.macro_manager = macro_manager
         self.baudrate = baudrate
         self.debug = debug
         self.ui_manager = ui_manager
+        self.ble_manager = ble_manager
 
         self.ser = None
         self.current_port = None
@@ -64,6 +65,15 @@ class SerialManager:
     def listen_loop(self) -> None:
         print_log(typeLog.info, f"Début de la loop")
         while not self.stop_flag:
+
+            if self.ble_manager and self.ble_manager.is_connected:
+                # BLE prioritaire : on ferme le port série et on attend
+                if self.ser:
+                    self.close()
+                    self.current_port = None
+                    self._last_status = False
+                time.sleep(0.2)
+                continue
 
             self.connect()
 

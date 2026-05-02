@@ -10,6 +10,7 @@ class UIManager:
     def __init__(self, yaml_manager: YamlManager, serial_manager=None):
         self.yaml_manager = yaml_manager
         self.serial_manager = serial_manager
+        self.ble_manager = None
 
         # IMPORTANT : ne PAS créer tk.Tk() avant
         self.root = ttk.Window(themename="darkly")
@@ -234,6 +235,8 @@ class UIManager:
     # -------------------------
 
     def on_close(self) -> None:
+        if self.ble_manager:
+            self.ble_manager.stop()
         if self.serial_manager:
             self.serial_manager.stop()
         self.root.destroy()

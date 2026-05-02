@@ -33,6 +33,9 @@ class YamlManager:
         with open(self.config_file, "w", encoding="utf-8") as f:
             yaml.dump(self.config, f)
 
+    def get_ble_address(self) -> str:
+        return self.config.get("ble_address", "")
+
     def get_serial_port(self) -> str:
         port = self.config["serial_port"]
         if self.debug:
@@ -57,7 +60,7 @@ class YamlManager:
         if not file_path.exists():
             file_path.touch()
 
-        subprocess.Popen(["gio","open", file_path])
+        os.startfile(file_path)
 
     def load_yaml_file(self, file_path) -> dict:
         if self.debug:

@@ -1,5 +1,6 @@
 import threading
 from library.yaml_manager import YamlManager
+from library.ble_manager import BLEManager
 from library.serial_manager import SerialManager
 from library.ui_manager import UIManager
 from library.macro_manager import MacroManager
@@ -12,13 +13,17 @@ def main():
     yaml_manager = YamlManager(debug=DEBUG)
     macro_manager = MacroManager(yaml_manager, debug=DEBUG)
     ui_manager = UIManager(yaml_manager)
-    serial_manager = SerialManager(yaml_manager, macro_manager, ui_manager)
-    ui_manager.serial_manager = serial_manager
 
-    serial_thread = threading.Thread(
-        target=serial_manager.listen_loop,
-        daemon=True
-    )
+    ble_manager = BLEManager(yaml_manager, macro_manager, ui_manager)
+    serial_manager = SerialManager(yaml_manager, macro_manager, ui_manager, ble_manager=ble_manager)
+
+    ui_manager.serial_manager = serial_manager
+    ui_manager.ble_manager = ble_manager
+
+    ble_thread = threading.Thread(target=ble_manager.listen_loop, daemon=True)
+    serial_thread = threading.Thread(target=serial_manager.listen_loop, daemon=True)
+
+    ble_thread.start()
     serial_thread.start()
 
     ui_manager.run()
