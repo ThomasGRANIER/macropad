@@ -2,15 +2,30 @@ import time
 import board
 import keypad
 import rotaryio
+import analogio
 from digitalio import DigitalInOut, Direction, Pull
 from adafruit_ble import BLERadio
+from adafruit_ble.services.standard import BatteryService
 from adafruit_ble.advertising.standard import ProvideServicesAdvertisement
 from adafruit_ble.services.nordic import UARTService
+
+vbat_pin = analogio.AnalogIn(board.BAT_VOLT)  # pin batterie du nice!nano
+def read_battery_percent():
+    samples = []
+    for _ in range(5):
+        samples.append(vbat_pin.value)
+        time.sleep(0.01)
+    raw = sum(samples) // len(samples)
+    voltage = (raw / 4095) * 3.6 * 2
+    percent = int((voltage - 3.2) / (4.2 - 3.2) * 100)
+    print(f"BAT raw={raw} voltage={voltage:.2f}V percent={percent}%")
+    return max(0, min(100, percent))
 
 # === Initialisation BLE ===
 ble = BLERadio()
 uart = UARTService()
-advertisement = ProvideServicesAdvertisement(uart)
+battery_service = BatteryService()
+advertisement = ProvideServicesAdvertisement(uart, battery_service)
 advertisement.complete_name = "SimplePAD"
 ble.start_advertising(advertisement)
 
@@ -43,6 +58,7 @@ flush_interval = 0.05  # 50 ms
 # === Buffer des événements ===
 event_buffer = []
 
+last_battery_update = time.monotonic()
 while True:
     # --- BLE : démarrer la publicité si non connecté ---
     if not ble.connected and not ble.advertising:
@@ -100,3 +116,8 @@ while True:
         last_flush = now
 
     time.sleep(0.005)  # petite pause pour soulager le CPU
+
+    # toutes les ~10s par exemple
+    if now - last_battery_update >= 10:
+        battery_service.level = read_battery_percent()
+        last_battery_update = now
