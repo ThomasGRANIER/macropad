@@ -16,10 +16,11 @@ def read_battery_percent():
         samples.append(vbat_pin.value)
         time.sleep(0.01)
     raw = sum(samples) // len(samples)
-    voltage = (raw / 4095) * 3.6 * 2
+    voltage = (raw / 4095) * 3.3 * 2  # 12-bit, réf 3.3V, diviseur /2
     percent = int((voltage - 3.2) / (4.2 - 3.2) * 100)
+    percent = max(0, min(100, percent))
     print(f"BAT raw={raw} voltage={voltage:.2f}V percent={percent}%")
-    return max(0, min(100, percent))
+    return percent
 
 # === Initialisation BLE ===
 ble = BLERadio()
@@ -58,7 +59,10 @@ flush_interval = 0.05  # 50 ms
 # === Buffer des événements ===
 event_buffer = []
 
+# === Initialisation batterie ===
+battery_service.level = read_battery_percent()
 last_battery_update = time.monotonic()
+
 while True:
     # --- BLE : démarrer la publicité si non connecté ---
     if not ble.connected and not ble.advertising:
@@ -107,7 +111,7 @@ while True:
             if ble.connected:
                 try:
                     uart.write((msg + "\n").encode("utf-8"))
-                    print(f"test : msg")
+                    print(f"BLE sent: {msg}")
                 except Exception as e:
                     print("BLE Error:", e)
             else:
@@ -117,7 +121,6 @@ while True:
 
     time.sleep(0.005)  # petite pause pour soulager le CPU
 
-    # toutes les ~10s par exemple
     if now - last_battery_update >= 10:
         battery_service.level = read_battery_percent()
         last_battery_update = now
