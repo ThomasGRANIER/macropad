@@ -19,7 +19,7 @@ def read_battery_percent():
     voltage = (raw / 4095) * 3.3 * 2  # 12-bit, réf 3.3V, diviseur /2
     percent = int((voltage - 3.2) / (4.2 - 3.2) * 100)
     percent = max(0, min(100, percent))
-    print(f"BAT raw={raw} voltage={voltage:.2f}V percent={percent}%")
+    # print(f"BAT raw={raw} voltage={voltage:.2f}V percent={percent}%")
     return percent
 
 # === Initialisation BLE ===
@@ -119,8 +119,8 @@ while True:
         event_buffer = []
         last_flush = now
 
-    time.sleep(0.005)  # petite pause pour soulager le CPU
+    time.sleep(0.005)
 
-    if now - last_battery_update >= 10:
+    if now - last_battery_update >= 60:
         battery_service.level = read_battery_percent()
         last_battery_update = now
