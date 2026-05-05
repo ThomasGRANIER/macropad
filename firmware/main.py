@@ -2,24 +2,40 @@ import time
 import board
 import keypad
 import rotaryio
-import analogio
 from digitalio import DigitalInOut, Direction, Pull
 from adafruit_ble import BLERadio
 from adafruit_ble.services.standard import BatteryService
 from adafruit_ble.advertising.standard import ProvideServicesAdvertisement
 from adafruit_ble.services.nordic import UARTService
 
-vbat_pin = analogio.AnalogIn(board.BAT_VOLT)  # pin batterie du nice!nano
+#vbat_pin = analogio.AnalogIn(board.BAT_VOLT)  # pin batterie du nice!nano_raw_history = []
+
 def read_battery_percent():
+    import analogio
+    pin = analogio.AnalogIn(board.BAT_VOLT)
+    time.sleep(0.1)
     samples = []
     for _ in range(5):
-        samples.append(vbat_pin.value)
-        time.sleep(0.01)
-    raw = sum(samples) // len(samples)
-    voltage = (raw / 4095) * 3.3 * 2  # 12-bit, réf 3.3V, diviseur /2
-    percent = int((voltage - 3.2) / (4.2 - 3.2) * 100)
+        samples.append(pin.value)
+        time.sleep(0.02)
+    pin.deinit()
+    s = sorted(samples)[1:-1]
+    raw = sum(s) / len(s)
+    voltage = (raw / 4095) * 7.152
+
+    # Courbe Li-Po 3.7V nominale (902030)
+    if   voltage >= 4.20: percent = 100
+    elif voltage >= 4.10: percent = int(90 + (voltage - 4.10) / 0.10 * 10)
+    elif voltage >= 3.95: percent = int(75 + (voltage - 3.95) / 0.15 * 15)
+    elif voltage >= 3.80: percent = int(55 + (voltage - 3.80) / 0.15 * 20)
+    elif voltage >= 3.70: percent = int(40 + (voltage - 3.70) / 0.10 * 15)
+    elif voltage >= 3.60: percent = int(25 + (voltage - 3.60) / 0.10 * 15)
+    elif voltage >= 3.40: percent = int(10 + (voltage - 3.40) / 0.20 * 15)
+    elif voltage >= 3.00: percent = int(2  + (voltage - 3.00) / 0.40 * 8)
+    else:                 percent = 0
+
     percent = max(0, min(100, percent))
-    # print(f"BAT raw={raw} voltage={voltage:.2f}V percent={percent}%")
+    print(f"BAT raw={int(raw)} voltage={voltage:.2f}V percent={percent}%")
     return percent
 
 # === Initialisation BLE ===
