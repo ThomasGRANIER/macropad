@@ -57,7 +57,7 @@ class YamlManager:
         if not file_path.exists():
             file_path.touch()
 
-        os.startfile(file_path)
+        subprocess.Popen(["gio","open", file_path])
 
     def load_yaml_file(self, file_path) -> dict:
         if self.debug:
